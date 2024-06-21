@@ -1,11 +1,12 @@
 using MainGame.Interface;
+using MainGame.SO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MainGame.Livings
 {
-    public class Player : MonoBehaviour, IEventable, ILivable, IMovable
+    public class Player : MonoBehaviour, IEventable, IInitable, ILivable, IMovable
     {
         public float _hp { get; set; } = 100f;
 
@@ -13,14 +14,29 @@ namespace MainGame.Livings
 
         public bool _isDamagable { get; set; } = true;
 
+
+
         public void Entry()
         {
-            WarpTo(Vector3.zero);
+            InitMaterial(SO_Material.Entity.PlayerBody);
+            InitPosition(Vector3.zero);
         }
 
         public void Flip()
         {
             MoveTo(transform.position + Vector3.right, Time.deltaTime);
+        }
+
+
+
+        public void InitPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
+        public void InitMaterial(Material material)
+        {
+            GetComponent<Renderer>().material = material;
         }
 
         public void Damage(float damage)
