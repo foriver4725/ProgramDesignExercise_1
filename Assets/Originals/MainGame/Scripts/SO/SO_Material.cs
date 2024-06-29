@@ -9,29 +9,5 @@ namespace MainGame.SO
     {
         [Header("ƒvƒŒƒCƒ„[‚Ì‘Ì")] public Material PlayerBody;
         [Header("“G‚Ì‘Ì")] public Material EnemyBody;
-
-
-
-        public const string PATH = "SO_Material";
-
-        private static SO_Material _entity;
-        public static SO_Material Entity
-        {
-            get
-            {
-                if (_entity == null)
-                {
-                    _entity = Resources.Load<SO_Material>(PATH);
-
-                    if (_entity == null)
-                    {
-                        Debug.LogError(PATH + " not found");
-                    }
-                }
-
-                return _entity;
-            }
-        }
     }
-
 }

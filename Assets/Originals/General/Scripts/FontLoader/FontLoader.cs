@@ -13,10 +13,14 @@ namespace General
         // Dynamicなフォントデータ
         private TMP_FontAsset _dynamicFontAsset = null;
 
-        public async void Entry()
+        public async UniTask Load()
         {
             // フォントデータのロードが完了するまで、IEventableの処理を全て停止する。
             _dynamicFontAsset = await Addressables.LoadAssetAsync<TMP_FontAsset>("NotoSansJP-Medium SDF_Dynamic");
+        }
+
+        public void Entry()
+        {
             // テクスチャのクリア
             _dynamicFontAsset.ClearFontAssetData();
         }

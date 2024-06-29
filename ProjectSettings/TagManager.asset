@@ -6,7 +6,8 @@ TagManager:
   tags:
   - player
   - enemy
-  - font_loader
+  - loader/so_loader
+  - loader/font_loader
   layers:
   - Default
   - TransparentFX

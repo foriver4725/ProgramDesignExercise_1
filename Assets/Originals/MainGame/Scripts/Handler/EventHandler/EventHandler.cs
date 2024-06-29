@@ -1,6 +1,6 @@
 using General;
 using MainGame.Ex;
-using MainGame.Livings;
+using MainGame.Interface;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,47 +9,62 @@ namespace MainGame.EventHandler
 {
     public class EventHandler : MonoBehaviour
     {
-        /// <summary>
-        /// FontLoaderスクリプトのインスタンス
-        /// </summary>
-        private FontLoader _fontLoader;
-        /// <summary>
-        /// Playerスクリプトのインスタンス
-        /// </summary>
-        private Player _player;
-        /// <summary>
-        /// Enemyスクリプトのインスタンス
-        /// </summary>
-        private Enemy _enemy;
+        public static EventHandler Instance { get; set; } = null;
 
         /// <summary>
-        /// シーン内の全てのスクリプトのインスタンスを取得.
+        /// IEventableのインスタンス
+        /// </summary>
+        public IEventable FontLoader { get; set; }
+        public IEventable SO_Loader { get; set; }
+        public IEventable Player { get; set; }
+        public IEventable Enemy { get; set; }
+
+        /// <summary>
+        /// シーン内の全てのIEventableのインスタンスを取得
         /// </summary>
         private void Awake()
         {
-            _fontLoader = "font_loader".FindTag<FontLoader>();
-            _player = "player".FindTag<Player>();
-            _enemy = "enemy".FindTag<Enemy>();
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+
+            FontLoader = "loader/font_loader".FindTag<IEventable>();
+            SO_Loader = "loader/so_loader".FindTag<IEventable>();
+            Player = "player".FindTag<IEventable>();
+            Enemy = "enemy".FindTag<IEventable>();
         }
 
         /// <summary>
-        /// BeforeEntry(), Entry() の順に呼ぶ.
+        /// BeforeEntry(), Entry() の順に呼ぶ
         /// </summary>
-        private void Start()
+        private async void Start()
         {
-            _fontLoader.Entry();
-            _player.Entry();
-            _enemy.Entry();
+            // ロードを行う
+            await ((FontLoader)FontLoader).Load();
+            await ((SO_Loader)SO_Loader).Load();
+
+            // ゲームの状態を設定する
+            GameStateSetter.SetGameState(
+                MainGame.SO_Loader.SO_GameState.Resolution,
+                MainGame.SO_Loader.SO_GameState.IsFullScreen,
+                MainGame.SO_Loader.SO_GameState.IsVsyncOn,
+                MainGame.SO_Loader.SO_GameState.TargetFrameRate
+                );
+
+            FontLoader.Entry();
+            SO_Loader.Entry();
+            Player.Entry();
+            Enemy.Entry();
         }
 
         /// <summary>
-        /// BeforeFlip(), Flip(), AfterFlip() の順に呼ぶ.
+        /// BeforeFlip(), Flip(), AfterFlip() の順に呼ぶ
         /// </summary>
         private void Update()
         {
-            _fontLoader.Flip();
-            _player.Flip();
-            _enemy.Flip();
+            FontLoader.Flip();
+            SO_Loader.Flip();
+            Player.Flip();
+            Enemy.Flip();
         }
     }
 }

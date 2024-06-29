@@ -18,7 +18,7 @@ namespace MainGame.Livings
 
         public void Entry()
         {
-            InitMaterial(SO_Material.Entity.PlayerBody);
+            InitMaterial(SO_Loader.SO_Material.PlayerBody);
             InitPosition(Vector3.zero);
         }
 
